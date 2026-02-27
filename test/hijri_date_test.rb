@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'date'
 require 'hijri_date'
 require 'minitest/autorun'
 require 'minitest/pride'
 
-class HijriDateTest < MiniTest::Test
+class HijriDateTest < Minitest::Test
   def setup
     @date = HijriDate::Date.new # 20/04/1432H = 25/03/2011AD
   end
@@ -36,9 +38,12 @@ class HijriDateTest < MiniTest::Test
     refute @date == HijriDate::Date.new(@date.year, @date.month + 1, @date.day)
     refute @date == HijriDate::Date.new(@date.year, @date.month, @date.day + 1)
 
-    assert_raises TypeError do
-      @date == Date.today
-    end
+    refute_equal @date, Date.today
+  end
+
+  def test_equality_returns_false_for_other_types
+    refute_equal @date, 42
+    refute_equal @date, nil
   end
 
   def test_add

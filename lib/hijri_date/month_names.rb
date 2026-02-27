@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module HijriDate
   MONTH_NAMES = {
@@ -32,7 +32,7 @@ module HijriDate
       'Zilqadah al-Haraam',
       'Zilhaj al-Haraam'
     ]
-  }
+  }.freeze
 
   MONTHNAMES_AR = MONTH_NAMES[:ar]
   MONTHNAMES_EN = MONTH_NAMES[:en]
@@ -53,7 +53,7 @@ module HijriDate
       'Zilqadah',
       'Zilhaj'
     ]
-  }
+  }.freeze
 
   SHORT_MONTHNAMES_EN = SHORT_MONTH_NAMES[:en]
 end

@@ -1,4 +1,28 @@
-inherit_from: .rubocop_todo.yml
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+  TargetRubyVersion: 2.7
+
+Metrics/AbcSize:
+  Max: 30
+
+Metrics/MethodLength:
+  Max: 12
+
+Lint/AmbiguousOperatorPrecedence:
+  Enabled: false
+
+Lint/RedundantSplatExpansion:
+  Enabled: false
+
+Gemspec/RequireMFA:
+  Enabled: false
+
+Naming/BinaryOperatorParameterName:
+  Enabled: false
+
+Naming/MethodParameterName:
+  Enabled: false
 
 Style/Documentation:
   Enabled: false

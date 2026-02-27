@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+require 'date'
 require 'hijri_date/constants'
 require 'hijri_date/month_names'
 require 'hijri_date/version'
@@ -5,7 +8,7 @@ require 'hijri_date/version'
 module HijriDate
   class Date
     # create setters and getters
-    attr_accessor :year, :month, :day
+    attr_reader :year, :month, :day
 
     # constructor
     def initialize(year = 1432, month = 4, day = 20)
@@ -26,7 +29,7 @@ module HijriDate
 
     # number of days in this (or the specified) month and year
     def days_in_month(month = self.month, year = self.year)
-      (month == 12 && kabisa?(year) || month.odd?) ? 30 : 29
+      month == 12 && kabisa?(year) || month.odd? ? 30 : 29
     end
 
     # day of the year corresponding to this (or specified) Hijri date
@@ -39,7 +42,7 @@ module HijriDate
       y30 = (date.year / 30.0).floor
       day_number = 1948084 + y30 * 10631 + day_of_year(date)
 
-      if date.year % 30 == 0
+      if (date.year % 30).zero?
         day_number
       else
         day_number + DAYS_IN_30_YEARS[date.year - y30 * 30 - 1]
@@ -48,10 +51,9 @@ module HijriDate
 
     # comparison operator
     def ==(other)
-      if other.is_a?(Date)
-        return other.year == year && other.month == month && other.day == day
-      end
-      fail TypeError, 'expected HijriDate::Date'
+      return false unless other.is_a?(Date)
+
+      other.year == year && other.month == month && other.day == day
     end
 
     # return a new HijriDate object that is n days after the current one.
@@ -60,7 +62,7 @@ module HijriDate
       when Numeric
         return HijriDate.jd(jd + n)
       end
-      fail TypeError, 'expected numeric'
+      raise TypeError, 'expected numeric'
     end
 
     # return a new HijriDate object that is n days before the current one.
@@ -69,7 +71,7 @@ module HijriDate
       when Numeric
         return HijriDate.jd(jd - n)
       end
-      fail TypeError, 'expected numeric'
+      raise TypeError, 'expected numeric'
     end
 
     # return the day of the week (0-6, Sunday is zero)
@@ -88,13 +90,13 @@ module HijriDate
     i += 1 while left > DAYS_IN_30_YEARS[i]
 
     year = (y30 * 30 + i).to_i
-    left -= DAYS_IN_30_YEARS[i - 1] if i > 0
+    left -= DAYS_IN_30_YEARS[i - 1] if i.positive?
 
     i = 0
     i += 1 while left > DAYS_IN_YEAR[i]
 
     month = (i + 1).to_i
-    day = i > 0 ? (left - DAYS_IN_YEAR[i - 1]) : left
+    day = i.positive? ? (left - DAYS_IN_YEAR[i - 1]) : left
 
     Date.new(year, month, day)
   end
